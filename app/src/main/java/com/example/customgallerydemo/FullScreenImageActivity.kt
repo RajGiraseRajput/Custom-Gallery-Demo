@@ -1,14 +1,10 @@
 package com.example.customgallerydemo
 
 import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
@@ -54,8 +50,16 @@ class FullScreenImageActivity : AppCompatActivity() {
                 currentPosition = position
                 thumbnailAdapter.updateSelection(position)
                 thumbnailRecyclerView.smoothScrollToPosition(position)
+
+                // Ensure the thumbnail scrolls into view
+//                (thumbnailRecyclerView.layoutManager as? LinearLayoutManager)?.let { layoutManager ->
+//                    layoutManager.scrollToPositionWithOffset(position, (thumbnailRecyclerView.width / 2) - 50)
+//                }
             }
         })
+        viewPager.post {
+            (thumbnailRecyclerView.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(currentPosition, (thumbnailRecyclerView.width / 2) - 50)
+        }
 
         // Delete button click
         findViewById<View>(R.id.btnDelete).setOnClickListener {
